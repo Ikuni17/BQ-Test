@@ -1,38 +1,15 @@
 package bqTest;
 
 import com.google.cloud.bigquery.*;
-import com.google.cloud.HttpServiceOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Test {
-
-    //static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
-
-
-    static String projectId = "mitate-144222";
-    static String datasetId = "test";
-    static String test_metricdata = "test_metricdata";
-    static DatasetId dsId = DatasetId.of(projectId, datasetId);
-    static DatasetInfo ds = Dataset.of(dsId);
-    //static TableId tableId = TableId.of(datasetId, "test");
-    //static TableId logsTable = TableId.of(datasetId, "test_logs");
-    //static TableId metricDataTable = TableId.of(datasetId, "test_metricdata");
-    //static TableId transferExecutedByTable = TableId.of(datasetId, "test_transferexecutedby");
-    static String name = "Aaa";
-    static int id = 0001;
-    static String name2 = "Bbb";
-    static int id2 = 0002;
-    static String field1 = "name";
-    static String field2 = "id";
-    //static String[] metricDataFields = {"metricid", "transferid", "transactionid", "value", "transferfinished", "deviceid", "responsedata"};
-
     static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
-    //static String datasetId = "MITATE";
+    static String datasetId = "test";
     static String sMetricData = "test_metricdata";
     static String sLogs = "test_logs";
     static String sTransferExecutedBy = "test_transferexecutedby";
@@ -50,9 +27,8 @@ public class Test {
     static List<InsertAllRequest.RowToInsert> transferExecutedByRowsToInsert = new ArrayList<>();
 
     public static void main(String... args) {
-        //System.out.println((bigquery.getClass().getName()));
+        // Different version of insertion
 
-        // ITS WORKING!!
         /*Map<String, Object> firstRow = new HashMap<>();
         Map<String, Object> secondRow = new HashMap<>();
         firstRow.put(field1, name);
@@ -99,11 +75,7 @@ public class Test {
     }
 
     public static void metricDataTest() {
-        //System.out.print(ds.getDatasetId());
-
-        //System.out.print(mtd);
-
-        Map<String, Object> row1 = new HashMap<>();
+         Map<String, Object> row1 = new HashMap<>();
         row1.put(metricDataFields[0], 10001);
         row1.put(metricDataFields[1], 123456);
         row1.put(metricDataFields[2], 7890);
@@ -111,18 +83,9 @@ public class Test {
         row1.put(metricDataFields[4], "yes?");
         row1.put(metricDataFields[5], "cody's phone");
 
-        /*Map<String, Object> row2 = new HashMap<>();
-        row2.put(metricDataFields[0], 10002);
-        row2.put(metricDataFields[1], 789123);
-        row2.put(metricDataFields[2], 4567);
-        row2.put(metricDataFields[3], 5.678);
-        row2.put(metricDataFields[4], "no");
-        row2.put(metricDataFields[5], "mike's phone");*/
-
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
         row1 = new HashMap<>();
 
-        //Map<String, Object> row1 = new HashMap<>();
         row1.put(metricDataFields[0], 10001);
         row1.put(metricDataFields[1], 123456);
         row1.put(metricDataFields[2], 7890);
@@ -131,27 +94,5 @@ public class Test {
         row1.put(metricDataFields[5], "mike's phone");
 
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
-
-
-        //if (insertResponse.hasErrors()) {
-        //System.out.println("Errors occurred while inserting rows");
-
-        //}
-
-
     }
-    /*public static Bigquery createAuthorizedBigQueryClient() throws IOException {
-        // Create the credential
-        HttpTransport transport = new NetHttpTransport();
-        JsonFactory jsonFactory = new JacksonFactory();
-        GoogleCredential credential = GoogleCredential.getApplicationDefault(transport, jsonFactory);
-
-        if (credential.createScopedRequired()) {
-            credential = credential.createScoped(BigqueryScopes.all());
-        }
-
-        return new Bigquery.Builder(transport, jsonFactory, credential)
-                .setApplicationName("MITATE")
-                .build();
-    }*/
 }
