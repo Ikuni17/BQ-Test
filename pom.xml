@@ -14,6 +14,12 @@
             <artifactId>google-cloud</artifactId>
             <version>0.5.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-bigquery</artifactId>
+            <version>v2-rev329-1.22.0</version>
+        </dependency>
     </dependencies>
 
 </project>

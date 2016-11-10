@@ -1,7 +1,9 @@
 package bqTest;
 
 import com.google.cloud.bigquery.*;
+import com.google.cloud.HttpServiceOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,30 +11,46 @@ import java.util.Map;
 
 public class Test {
 
-    static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+    //static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+
 
     static String projectId = "mitate-144222";
     static String datasetId = "test";
     static String test_metricdata = "test_metricdata";
     static DatasetId dsId = DatasetId.of(projectId, datasetId);
     static DatasetInfo ds = Dataset.of(dsId);
-    static TableId tableId = TableId.of(datasetId, "test");
-    static TableId logsTable = TableId.of(datasetId, "test_logs");
-    static TableId metricDataTable = TableId.of(datasetId, "test_metricdata");
-    static TableId transferExecutedByTable = TableId.of(datasetId, "test_transferexecutedby");
+    //static TableId tableId = TableId.of(datasetId, "test");
+    //static TableId logsTable = TableId.of(datasetId, "test_logs");
+    //static TableId metricDataTable = TableId.of(datasetId, "test_metricdata");
+    //static TableId transferExecutedByTable = TableId.of(datasetId, "test_transferexecutedby");
     static String name = "Aaa";
     static int id = 0001;
     static String name2 = "Bbb";
     static int id2 = 0002;
     static String field1 = "name";
     static String field2 = "id";
+    //static String[] metricDataFields = {"metricid", "transferid", "transactionid", "value", "transferfinished", "deviceid", "responsedata"};
+
+    static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+    //static String datasetId = "MITATE";
+    static String sMetricData = "test_metricdata";
+    static String sLogs = "test_logs";
+    static String sTransferExecutedBy = "test_transferexecutedby";
+
     static String[] metricDataFields = {"metricid", "transferid", "transactionid", "value", "transferfinished", "deviceid", "responsedata"};
+    static String[] logsFields = {"logid", "username", "transferid", "deviceid", "logmessage", "transferfinished"};
+    static String[] transferExececutedByFields = {"transferid", "devicename", "username", "carriername", "deviceid"};
 
-    static Table table;
+    static Table metricDataTable = bigquery.getTable(datasetId, sMetricData);
+    static Table logsTable = bigquery.getTable(datasetId, sLogs);
+    static Table transferExecutedByTable = bigquery.getTable(datasetId, sTransferExecutedBy);
 
+    static List<InsertAllRequest.RowToInsert> metricRowsToInsert = new ArrayList<>();
+    static List<InsertAllRequest.RowToInsert> logsRowsToInsert = new ArrayList<>();
+    static List<InsertAllRequest.RowToInsert> transferExecutedByRowsToInsert = new ArrayList<>();
 
     public static void main(String... args) {
-
+        //System.out.println((bigquery.getClass().getName()));
 
         // ITS WORKING!!
         /*Map<String, Object> firstRow = new HashMap<>();
@@ -49,41 +67,91 @@ public class Test {
         if (insertResponse.hasErrors()) {
             System.out.println("Errors occurred while inserting rows");
         }*/
+
         metricDataTest();
+        logsTest();
+        transferExecutedByTest();
+        metricDataTable.insert(metricRowsToInsert);
+        logsTable.insert(logsRowsToInsert);
+        transferExecutedByTable.insert(transferExecutedByRowsToInsert);
+    }
+
+    public static void logsTest() {
+        Map<String, Object> row1 = new HashMap<>();
+        row1.put(logsFields[1], "channing");
+        row1.put(logsFields[2], 123456);
+        row1.put(logsFields[3], "galaxy s8");
+        row1.put(logsFields[4], "dsakdjaskljdalk");
+        row1.put(logsFields[5], "yes?");
+
+        logsRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
+    }
+
+    public static void transferExecutedByTest() {
+        Map<String, Object> row1 = new HashMap<>();
+        row1.put(transferExececutedByFields[0], 456789);
+        row1.put(transferExececutedByFields[1], "galaxy s8");
+        row1.put(transferExececutedByFields[2], "sam");
+        row1.put(transferExececutedByFields[3], "verizon");
+        row1.put(transferExececutedByFields[4], "adsadasd");
+
+        transferExecutedByRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
     }
 
     public static void metricDataTest() {
         //System.out.print(ds.getDatasetId());
-        Table mtd = bigquery.getTable(datasetId, test_metricdata);
 
         //System.out.print(mtd);
-        List<InsertAllRequest.RowToInsert> rows = new ArrayList<>();
+
         Map<String, Object> row1 = new HashMap<>();
         row1.put(metricDataFields[0], 10001);
         row1.put(metricDataFields[1], 123456);
         row1.put(metricDataFields[2], 7890);
         row1.put(metricDataFields[3], 1.234);
         row1.put(metricDataFields[4], "yes?");
-        row1.put(metricDataFields[5], "brad's phone");
+        row1.put(metricDataFields[5], "cody's phone");
 
-        Map<String, Object> row2 = new HashMap<>();
+        /*Map<String, Object> row2 = new HashMap<>();
         row2.put(metricDataFields[0], 10002);
         row2.put(metricDataFields[1], 789123);
         row2.put(metricDataFields[2], 4567);
         row2.put(metricDataFields[3], 5.678);
         row2.put(metricDataFields[4], "no");
-        row2.put(metricDataFields[5], "mike's phone");
+        row2.put(metricDataFields[5], "mike's phone");*/
 
-        rows.add(InsertAllRequest.RowToInsert.of(row1));
-        rows.add(InsertAllRequest.RowToInsert.of(row2));
+        metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
+        row1 = new HashMap<>();
 
-        InsertAllResponse insertResponse = mtd.insert(rows);
+        //Map<String, Object> row1 = new HashMap<>();
+        row1.put(metricDataFields[0], 10001);
+        row1.put(metricDataFields[1], 123456);
+        row1.put(metricDataFields[2], 7890);
+        row1.put(metricDataFields[3], 1.234);
+        row1.put(metricDataFields[4], "yes?");
+        row1.put(metricDataFields[5], "mike's phone");
 
-        if (insertResponse.hasErrors()) {
-            System.out.println("Errors occurred while inserting rows");
+        metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
 
-        }
+
+        //if (insertResponse.hasErrors()) {
+        //System.out.println("Errors occurred while inserting rows");
+
+        //}
 
 
     }
+    /*public static Bigquery createAuthorizedBigQueryClient() throws IOException {
+        // Create the credential
+        HttpTransport transport = new NetHttpTransport();
+        JsonFactory jsonFactory = new JacksonFactory();
+        GoogleCredential credential = GoogleCredential.getApplicationDefault(transport, jsonFactory);
+
+        if (credential.createScopedRequired()) {
+            credential = credential.createScoped(BigqueryScopes.all());
+        }
+
+        return new Bigquery.Builder(transport, jsonFactory, credential)
+                .setApplicationName("MITATE")
+                .build();
+    }*/
 }
