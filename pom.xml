@@ -8,6 +8,11 @@
     <artifactId>untitled104</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.google.cloud</groupId>
@@ -19,6 +24,12 @@
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-bigquery</artifactId>
             <version>v2-rev329-1.22.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.0</version>
         </dependency>
     </dependencies>
 

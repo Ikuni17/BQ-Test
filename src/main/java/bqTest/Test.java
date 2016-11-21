@@ -47,9 +47,10 @@ public class Test {
         metricDataTest();
         logsTest();
         transferExecutedByTest();
-        metricDataTable.insert(metricRowsToInsert);
-        logsTable.insert(logsRowsToInsert);
-        transferExecutedByTable.insert(transferExecutedByRowsToInsert);
+        //metricDataTable.insert(metricRowsToInsert);
+        //logsTable.insert(logsRowsToInsert);
+        //transferExecutedByTable.insert(transferExecutedByRowsToInsert);
+        System.out.print(metricRowsToInsert.get(0).getContent());
     }
 
     public static void logsTest() {
