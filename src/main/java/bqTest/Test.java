@@ -2,12 +2,13 @@ package bqTest;
 
 import com.google.cloud.bigquery.*;
 import com.google.gson.*;
+import com.google.gson.stream.JsonWriter;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONWriter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 public class Test {
     static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
@@ -28,7 +29,7 @@ public class Test {
     static List<InsertAllRequest.RowToInsert> logsRowsToInsert = new ArrayList<>();
     static List<InsertAllRequest.RowToInsert> transferExecutedByRowsToInsert = new ArrayList<>();
 
-    public static void main(String... args) {
+    public static void main(String... args) throws IOException {
         // Different version of insertion
 
         /*Map<String, Object> firstRow = new HashMap<>();
@@ -53,21 +54,34 @@ public class Test {
         //logsTable.insert(logsRowsToInsert);
         //transferExecutedByTable.insert(transferExecutedByRowsToInsert);
 
-        JsonParser parser = new JsonParser();
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        String sMetricRow = metricRowsToInsert.get(0).getContent().toString();
-        //JsonElement element = parser.parse(sMetricRow);
-        //System.out.println(element);
-        System.out.println(metricRowsToInsert.get(0).getContent().getClass());
-        JSONObject json = new JSONObject(metricRowsToInsert.get(0).getContent());
-        System.out.print("Json: ");
-        // This is an actual JSONobject formatted correctly
-        System.out.println(json);
-        System.out.println(sMetricRow);
-        //Gson gMetricRow = gson.toJson(sMetricRow);
-        //JSONObject jMetricRow = toJson(sMetricRow);
-        System.out.println(gson.toJson(metricRowsToInsert.get(0).getContent()));
+        //GsonBuilder builder = new GsonBuilder();
+        //Gson gson = builder.create();
+        //String sMetricRow = metricRowsToInsert.get(0).getContent().toString();
+
+        JSONArray jArray = new JSONArray(metricRowsToInsert);
+        //JsonArray gArray = new JsonArray();
+        //JSONObject json = new JSONObject(metricRowsToInsert.get(0).getContent());
+        //Iterator stuff = metricRowsToInsert.iterator();
+        //JSONObject json2 = new JSONObject();
+
+        //System.out.println(metricRowsToInsert.size());
+        //while (stuff.hasNext()){
+            //jArray.put(stuff.next());
+            //json2.append();
+            //System.out.println(stuff.next());
+        //}
+        //System.out.print("Json: ");
+        //System.out.println(json);
+        System.out.print("JArray: ");
+        System.out.println(jArray);
+        File file = new File("testJson.json");
+        FileOutputStream out = new FileOutputStream(file);
+        JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+        writer.setIndent("\n");
+        //writer.beginArray();
+        //writer.
+        //System.out.println(jArray.get(0).getClass());
+        //System.out.println("String: " + sMetricRow);
     }
 
     public static void logsTest() {
@@ -99,7 +113,7 @@ public class Test {
         row1.put(metricDataFields[2], 7890);
         row1.put(metricDataFields[3], 1.234);
         row1.put(metricDataFields[4], "yes?");
-        row1.put(metricDataFields[5], "cody's phone");
+        row1.put(metricDataFields[5], "json test");
 
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
         row1 = new HashMap<>();
@@ -109,7 +123,7 @@ public class Test {
         row1.put(metricDataFields[2], 7890);
         row1.put(metricDataFields[3], 1.234);
         row1.put(metricDataFields[4], "yes?");
-        row1.put(metricDataFields[5], "mike's phone");
+        row1.put(metricDataFields[5], "json2 test");
 
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
     }
