@@ -1,6 +1,8 @@
 package bqTest;
 
 import com.google.cloud.bigquery.*;
+import com.google.gson.*;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +52,22 @@ public class Test {
         //metricDataTable.insert(metricRowsToInsert);
         //logsTable.insert(logsRowsToInsert);
         //transferExecutedByTable.insert(transferExecutedByRowsToInsert);
-        System.out.print(metricRowsToInsert.get(0).getContent());
+
+        JsonParser parser = new JsonParser();
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        String sMetricRow = metricRowsToInsert.get(0).getContent().toString();
+        //JsonElement element = parser.parse(sMetricRow);
+        //System.out.println(element);
+        System.out.println(metricRowsToInsert.get(0).getContent().getClass());
+        JSONObject json = new JSONObject(metricRowsToInsert.get(0).getContent());
+        System.out.print("Json: ");
+        // This is an actual JSONobject formatted correctly
+        System.out.println(json);
+        System.out.println(sMetricRow);
+        //Gson gMetricRow = gson.toJson(sMetricRow);
+        //JSONObject jMetricRow = toJson(sMetricRow);
+        System.out.println(gson.toJson(metricRowsToInsert.get(0).getContent()));
     }
 
     public static void logsTest() {
