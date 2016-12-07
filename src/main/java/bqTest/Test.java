@@ -9,9 +9,15 @@ import org.json.JSONWriter;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 public class Test {
     static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+
+    // Another way to instantiate BQ service
+    /*static BigQueryOptions.Builder optionsBuilder = BigQueryOptions.newBuilder();
+    static BigQuery bigquery = optionsBuilder.build().getService();*/
+
     static String datasetId = "test";
     static String sMetricData = "test_metricdata";
     static String sLogs = "test_logs";
@@ -29,9 +35,8 @@ public class Test {
     static List<InsertAllRequest.RowToInsert> logsRowsToInsert = new ArrayList<>();
     static List<InsertAllRequest.RowToInsert> transferExecutedByRowsToInsert = new ArrayList<>();
 
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) throws IOException, TimeoutException, InterruptedException {
         // Different version of insertion
-
         /*Map<String, Object> firstRow = new HashMap<>();
         Map<String, Object> secondRow = new HashMap<>();
         firstRow.put(field1, name);
@@ -50,38 +55,31 @@ public class Test {
         metricDataTest();
         logsTest();
         transferExecutedByTest();
-        //metricDataTable.insert(metricRowsToInsert);
+
+        //System.out.println(metricRowsToInsert);
+        //metricRowsToInsert.clear();
+        //System.out.println(metricRowsToInsert);
+
+        InsertAllResponse metricResponse = metricDataTable.insert(metricRowsToInsert);
+        System.out.println(metricResponse);
+        System.out.println(metricResponse.getInsertErrors());
+        if(metricResponse.hasErrors()){
+            System.out.println("Has errors");
+        }
         //logsTable.insert(logsRowsToInsert);
         //transferExecutedByTable.insert(transferExecutedByRowsToInsert);
 
-        //GsonBuilder builder = new GsonBuilder();
-        //Gson gson = builder.create();
-        //String sMetricRow = metricRowsToInsert.get(0).getContent().toString();
+        // This will take a set of rows and write to a JSON file
+        // Another option is to use an iterator
+        /*JSONArray jArray = new JSONArray(metricRowsToInsert);
+        String filePath = "testJson.json";
+        File file = new File(filePath);
+        Gson gson = new Gson();
+        String sJson = gson.toJson(jArray);
+        FileWriter writer = new FileWriter(file);
+        writer.write(sJson);
+        writer.close();*/
 
-        JSONArray jArray = new JSONArray(metricRowsToInsert);
-        //JsonArray gArray = new JsonArray();
-        //JSONObject json = new JSONObject(metricRowsToInsert.get(0).getContent());
-        //Iterator stuff = metricRowsToInsert.iterator();
-        //JSONObject json2 = new JSONObject();
-
-        //System.out.println(metricRowsToInsert.size());
-        //while (stuff.hasNext()){
-            //jArray.put(stuff.next());
-            //json2.append();
-            //System.out.println(stuff.next());
-        //}
-        //System.out.print("Json: ");
-        //System.out.println(json);
-        System.out.print("JArray: ");
-        System.out.println(jArray);
-        File file = new File("testJson.json");
-        FileOutputStream out = new FileOutputStream(file);
-        JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
-        writer.setIndent("\n");
-        //writer.beginArray();
-        //writer.
-        //System.out.println(jArray.get(0).getClass());
-        //System.out.println("String: " + sMetricRow);
     }
 
     public static void logsTest() {
@@ -113,7 +111,7 @@ public class Test {
         row1.put(metricDataFields[2], 7890);
         row1.put(metricDataFields[3], 1.234);
         row1.put(metricDataFields[4], "yes?");
-        row1.put(metricDataFields[5], "json test");
+        row1.put(metricDataFields[5], "service test");
 
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
         row1 = new HashMap<>();
@@ -123,7 +121,7 @@ public class Test {
         row1.put(metricDataFields[2], 7890);
         row1.put(metricDataFields[3], 1.234);
         row1.put(metricDataFields[4], "yes?");
-        row1.put(metricDataFields[5], "json2 test");
+        row1.put(metricDataFields[5], "service test");
 
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
     }
