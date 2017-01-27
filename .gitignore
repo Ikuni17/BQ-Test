@@ -55,7 +55,6 @@ Temporary Items
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -67,7 +66,6 @@ hs_err_pid*
 # IntelliJ project files
 .idea
 *.iml
-out
 gen
 .gitignore
 .idea/compiler.xml
@@ -89,3 +87,4 @@ target/
 untitled104.iml
 src/main/java/META-INF/
 testJson.json
+out
