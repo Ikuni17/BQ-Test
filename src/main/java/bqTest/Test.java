@@ -53,8 +53,8 @@ public class Test {
         }*/
 
         metricDataTest();
-        logsTest();
-        transferExecutedByTest();
+        //logsTest();
+        //transferExecutedByTest();
 
         //System.out.println(metricRowsToInsert);
         //metricRowsToInsert.clear();
@@ -105,23 +105,23 @@ public class Test {
     }
 
     public static void metricDataTest() {
-         Map<String, Object> row1 = new HashMap<>();
-        row1.put(metricDataFields[0], 10001);
-        row1.put(metricDataFields[1], 123456);
-        row1.put(metricDataFields[2], 7890);
-        row1.put(metricDataFields[3], 1.234);
-        row1.put(metricDataFields[4], "yes?");
-        row1.put(metricDataFields[5], "service test");
+        Map<String, Object> row1 = new HashMap<>();
+        row1.put(metricDataFields[0], 10003);
+        row1.put(metricDataFields[1], 9876);
+        row1.put(metricDataFields[2], 54321);
+        row1.put(metricDataFields[3], 1.111);
+        row1.put(metricDataFields[4], "hai");
+        row1.put(metricDataFields[5], "jar test 1");
 
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
         row1 = new HashMap<>();
 
-        row1.put(metricDataFields[0], 10001);
+        row1.put(metricDataFields[0], 10003);
         row1.put(metricDataFields[1], 123456);
         row1.put(metricDataFields[2], 7890);
         row1.put(metricDataFields[3], 1.234);
-        row1.put(metricDataFields[4], "yes?");
-        row1.put(metricDataFields[5], "service test");
+        row1.put(metricDataFields[4], "iie");
+        row1.put(metricDataFields[5], "jar test 2");
 
         metricRowsToInsert.add(InsertAllRequest.RowToInsert.of(row1));
     }
