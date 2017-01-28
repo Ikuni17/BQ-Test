@@ -83,7 +83,6 @@ gen
 google-api-services-bigquery-v2-rev329-java-1.22.0/
 src/main/resources/
 src/test/
-target/
 untitled104.iml
 src/main/java/META-INF/
 testJson.json
