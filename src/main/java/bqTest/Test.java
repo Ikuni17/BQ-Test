@@ -1,5 +1,7 @@
 package bqTest;
 
+//stuff
+
 import com.google.cloud.bigquery.*;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
