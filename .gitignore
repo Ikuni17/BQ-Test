@@ -87,3 +87,4 @@ untitled104.iml
 src/main/java/META-INF/
 testJson.json
 out
+!/target/BQTest-1.0-jar-with-dependencies.jar
